@@ -1,0 +1,46 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=screen-width, height=screen-height, initial-scale=1" />
+		<meta property="og:type" content="website" />
+    <meta property="og:site_name" content="AutoDM" />
+    <meta property="og:locale" content="en_US" />
+		<link rel="stylesheet" href="./css/name_generate.css" />
+		<title>Bulk Name Generator</title>
+	</head>
+	<body>
+		<div class="container" id="container">
+			<script type="text/javascript" src="./js/name_generate.js"></script>
+			<h1>Bulk Name Generator</h1>
+			<input type="text" id="amount" placeholder="Number of Names"/><a id="generate" href="#" onclick="generate()">Generate</a>
+			<p class="output" id="output"></p>
+			<script type="text/javascript">
+
+				amount.addEventListener("keyup", function(event) {
+					if (event.keyCode === 13) {
+						event.preventDefault();
+						document.getElementById("generate").click();
+					}
+				});
+
+				function generate(){
+					let y = document.getElementById('amount');
+					let x = y.value;
+					if(!isNaN(x)){
+						let out = '';
+						for(let i = 0; i < Number(x); i++){
+							out += generate_name() + '<br>';
+						}
+						document.getElementById('output').innerHTML = out;
+					}
+					else{
+						document.getElementById('output').innerHTML = '<span style="color: red">INVALID</span>';
+						y.value = "";
+						y.focus();
+					}
+				}
+			</script>
+		</div>
+	</body>
+</html>

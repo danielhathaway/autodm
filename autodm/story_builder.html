@@ -1,0 +1,156 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=screen-width, height=screen-height, initial-scale=1" />
+		<meta property="og:type" content="website" />
+    <meta property="og:site_name" content="AutoDM" />
+    <meta property="og:locale" content="en_US" />
+		<link rel="stylesheet" href="./css/story_builder.css" />
+		<title>Story Builder</title>
+	</head>
+	<body>
+		<div class="container" id="container">
+			<div class="header-container">
+				<span style="font-size: 28px;">Story Builder</span>
+				<a id="load" class="file" onclick="load()">Load</a>
+				<a id="save" class="file" onclick="save()">Save</a>
+			</div>
+			<textarea id="text"></textarea><br/>
+			<a id="addStatic" href="#" onclick="addNewItem()">Add as Static Item</a>
+			<a id="addOption" href="#" onclick="addNewOption()" style="display:none">Add as Option to Existing Item</a>
+			<div id="plot-container" class="plot-container"></div>
+		</div>
+
+		<script type="text/javascript" src="./js/story_builder.js"></script>
+		<script type="text/javascript">
+
+			var plot = new Plot();
+
+			function addNewItem() {
+				let text = document.getElementById('text');
+				if(text.value != '') {
+					plot.addStaticItem(text.value);
+					plotBuilder(plot);
+					text.value = '';
+					text.focus();
+				}
+			}
+
+			function addNewOption() {
+				if(document.getElementById('text').value != '') {
+					document.getElementById('addOption').text = 'CLICK ON AN ELEMENT';
+					document.getElementById('addOption').style.backgroundColor = '#0470ff';
+					makeSelectable(plot);
+				}
+			}
+
+			function makeSelectable(plot) {
+				let wraps = document.getElementsByClassName('wrapper');
+				for(let i = 0; i < wraps.length; i++) {
+					wraps[i].onclick = function() { event.stopPropagation(); };
+				}
+				for(let i = 0; i < plot.items.length; i++) {
+					let parentId = plot.items[i].id;
+					let id = 'plotItem' + parentId;
+					let e = document.getElementById(id);
+					e.classList.add('selectable');
+					e.onclick = function() { addChild(plot, parentId); };
+				}
+			}
+
+			function addChild(plot, parentId) {
+				let text = document.getElementById('text');
+				if(text.value != '') {
+					plot.addItem(text.value, parentId);
+					plotBuilder(plot);
+					text.value = '';
+					text.focus();
+				}
+				document.getElementById('addOption').text = 'Add as Option to Existing Item';
+				document.getElementById('addOption').style.backgroundColor = '#03aa6d';
+			}
+
+			function plotBuilder(plot) {
+				if(plot.staticItems.length == 0) { document.getElementById('addOption').style.display = "none"; }
+				else { document.getElementById('addOption').style.display = ""; }
+				let contents = '';
+				let html_a = '<span class="wrapper"><div id="plotItem';
+				let html_b = '" class="plot-item static-item"><p>';
+				let html_c = '</p>';
+				let html_d = '</div></span>';
+				for(let i = 0; i < plot.staticItems.length; i++) {
+					contents += html_a + plot.staticItems[i] + html_b;
+					let index = plot.getIndex(plot.staticItems[i]);
+					contents += plot.items[index].text + html_c;
+					if (plot.items[index].children.length != 0) {
+						for(let n = 0; n < plot.items[index].children.length; n++) {
+							contents += recursivePlotBuilder(plot, plot.items[index].children[n]);
+						}
+					}
+					contents += html_d;
+				}
+				document.getElementById('plot-container').innerHTML = contents;
+			}
+
+			function recursivePlotBuilder(plot, target) {
+				let contents = '';
+				let html_a = '<span class="wrapper"><div id="plotItem';
+				let html_b = '" class="plot-item"><p>';
+				let html_c = '</p>';
+				let html_d = '</div></span>';
+				let index = plot.getIndex(target);
+				contents += html_a + target + html_b + plot.items[index].text + html_c;
+				if (typeof plot.items[index].children !== 'undefined') {
+					for(let i = 0; i < plot.items[index].children.length; i++) {
+						contents += recursivePlotBuilder(plot, plot.items[index].children[i]);
+					}
+				}
+				contents += html_d;
+				return contents;
+			}
+
+			function save() {
+				let e = document.createElement('a');
+				let text = JSON.stringify(plot);
+				let name = plot.id;
+				e.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+				e.setAttribute('download', 'Plot' + name + '.txt');
+				e.style.display = 'none';
+				document.body.appendChild(e);
+				e.click();
+				document.body.removeChild(e);
+			}
+
+			function load() {
+				getText().then(text => {
+					let obj = JSON.parse(text);
+					plot = new Plot(obj);
+					plotBuilder(plot);
+				})
+			}
+
+			function getText() {
+				return new Promise((resolve) => {
+					let u = document.createElement('input');
+					u.type = 'file';
+					u.style.display = 'none';
+					u.addEventListener('change', () => {
+						let f = u.files;
+						if (f.length) {
+							let r = new FileReader();
+							r.addEventListener('load', () => {
+								u.parentNode.removeChild(u);
+								resolve(r.result);
+							})
+							r.readAsText(f[0]);
+						}
+					})
+					document.body.appendChild(u);
+					u.click();
+				})
+			}
+
+		</script>
+	</body>
+</html>

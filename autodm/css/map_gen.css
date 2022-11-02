@@ -1,0 +1,37 @@
+table {
+	border: 0 !important;
+	margin: 0 !important;
+	padding: 0 !important;
+	background-color: #fceeaf;
+	border-collapse: collapse !important;
+	border-spacing: 0px !important;
+	font-size: 0px !important;
+	line-height: 0px !important;
+}
+tr {
+	border: 0;
+	margin: 0;
+	padding: 0;
+	font-size: 0px;
+	line-height: 0px;
+}
+td {
+	border: 0;
+	height: 40px;
+	width: 40px;
+	margin: 0;
+	padding: 0;
+	font-size: 0px;
+	line-height: 0px;
+}
+td.town{
+	background-color: #ff6808 !important;
+}
+td.dungeon {
+	background-color: #ff00ff !important;
+}
+img {
+	border: 0;
+	margin: 0;
+	padding: 0;
+}

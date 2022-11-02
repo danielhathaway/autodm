@@ -1,0 +1,109 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=screen-width, height=screen-height, initial-scale=1" />
+		<meta property="og:type" content="website" />
+    <meta property="og:site_name" content="AutoDM" />
+    <meta property="og:locale" content="en_US" />
+		<link rel="stylesheet" href="./css/map_gen.css" />
+		<title>Map Gen Test</title>
+	</head>
+	<body>
+		<div id="mapContainer">
+			<script type="text/javascript" src="./js/map_gen.js"></script>
+			<table id="mapDisplay" cellpadding="0" cellspacing="0" border="0">
+				<script type="text/javascript">
+
+				/*
+					TODO:
+					- Make town and dungeon tiles
+					- Make multiple mountain tiles
+					- ...
+				*/
+
+					let map = new Map(47, 23, 0, 3, 3);
+					let output = '';
+					for(let i = 0; i < map.board.length; i++) {
+						output += '<tr>';
+						for(let n = 0; n < map.board[i].length; n++) {
+
+							// START OF CELL
+							output += '<td>';
+
+							if(map.board[i][n].town == true){
+								if(map.board[i][n].dungeon == true){ output += '<img src="./img/td.png" />'; }
+								else{ output += '<img src="./img/town.png" />'; }
+							}
+							else if(map.board[i][n].dungeon == true){ output += '<img src="./img/dungeon.png" />'; }
+
+							// Water Tile Handling
+							else if(map.board[i][n].terrain == 'water'){
+								let water_str = '';
+
+								// top
+								if(i == 0){ water_str += '0'; }
+								else if(map.board[i-1][n].terrain == 'water'){ water_str += '1'; }
+								else { water_str += '0'; }
+
+								// right
+								if(n == (map.board[i].length - 1)){ water_str += '0'; }
+								else if(map.board[i][n+1].terrain == 'water'){ water_str += '1'; }
+								else{ water_str += '0'; }
+
+								// bottom
+								if(i == (map.board.length - 1)){ water_str += '0'; }
+								else if(map.board[i+1][n].terrain == 'water'){ water_str += '1'; }
+								else { water_str += '0'; }
+
+								// left
+								if(n == 0){ water_str += '0'; }
+								else if(map.board[i][n-1].terrain == 'water'){ water_str += '1'; }
+								else{ water_str += '0'; }
+
+								// determine proper tile
+								if(water_str == '0110'){ output += '<img src="./img/water1.png" />'; }
+								else if(water_str == '0011'){ output += '<img src="./img/water2.png" />'; }
+								else if(water_str == '1001'){ output += '<img src="./img/water3.png" />'; }
+								else if(water_str == '1100'){ output += '<img src="./img/water4.png" />'; }
+								else if(water_str == '1110'){ output += '<img src="./img/water5.png" />'; }
+								else if(water_str == '0111'){ output += '<img src="./img/water6.png" />'; }
+								else if(water_str == '1011'){ output += '<img src="./img/water7.png" />'; }
+								else if(water_str == '1101'){ output += '<img src="./img/water8.png" />'; }
+								else if(water_str == '0101'){ output += '<img src="./img/water9.png" />'; }
+								else if(water_str == '1010'){ output += '<img src="./img/water10.png" />'; }
+
+								//else if(water_str == '0000'){ output += '<img src="./img/water11.png" />'; } // remove pond clutter
+								else if(water_str == '0000'){ output += '<img src="./img/forest.png" />'; } // TEMPORARY
+
+								else if(water_str == '0010'){ output += '<img src="./img/water12.png" />'; }
+								else if(water_str == '0001'){ output += '<img src="./img/water13.png" />'; }
+								else if(water_str == '1000'){ output += '<img src="./img/water14.png" />'; }
+								else if(water_str == '0100'){ output += '<img src="./img/water15.png" />'; }
+								else if(water_str == '1111'){ output += '<img src="./img/water16.png" />'; }
+							}
+
+							else if(map.board[i][n].terrain == 'mountain'){
+								output += '<img src="./img/mountain' + rdmInt(1,2) + '.png" />';
+							}
+
+							else{ output += '<img src="./img/' + map.board[i][n].terrain + '.png" />'; }
+							/*
+							else if(map.board[i][n].terrain == 'forest'){ output += '<img src="./img/forest.png" />'; }
+							else if(map.board[i][n].terrain == 'dark_forest'){ output += '<img src="./img/dark_forest.png" />'; }
+							else if(map.board[i][n].terrain == 'mountain'){ output += '<img src="./img/mountain.png" />'; }
+							else if(map.board[i][n].terrain == 'plains'){ output += '<img src="./img/plains.png" />'; }
+							*/
+
+							// END OF CELL
+							output += '</td>';
+						}
+						output += '</tr>';
+					}
+					let display = document.getElementById('mapDisplay');
+					display.innerHTML = output;
+				</script>
+			</table>
+		</div>
+	</body>
+</html>

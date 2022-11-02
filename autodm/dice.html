@@ -1,0 +1,71 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=screen-width, height=screen-height, initial-scale=1" />
+		<meta property="og:type" content="website" />
+    <meta property="og:site_name" content="AutoDM" />
+    <meta property="og:locale" content="en_US" />
+		<title>Dice</title>
+		<style>
+			html, body {
+				font-family: 'arial';
+				font-size: 14px;
+				background-color: #1e212a;
+				color: #a2a2a2;
+			}
+			.container {
+				text-align: left;
+				padding: 0 20%;
+			}
+			.btn-container {
+				text-align: center;
+			}
+			a {
+				padding: 4% 4%;
+				margin: 2% 0;
+				text-decoration: none;
+				color: #ffffff;
+				background-color: #03aa6d;
+				text-shadow: 1px 1px #333333;
+				display: inline-block;
+				font-size: 20px;
+			}
+				a:hover {
+					background-color: #0470ff;
+				}
+			.output {
+				border: thin solid #ffffff;
+				font-size: 64px;
+				text-align: center;
+				margin-bottom: 2%;
+				padding: 10% 0;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="container" id="container">
+			<h1>Dice</h1>
+			<div id="output" class="output">-</div>
+			<div class="btn-container">
+				<a id="d2" href="#" onclick="roll(2)">D2</a>
+				<a id="d4" href="#" onclick="roll(4)">D4</a>
+				<a id="d6" href="#" onclick="roll(6)">D6</a>
+				<a id="d8" href="#" onclick="roll(8)">D8</a>
+				<a id="d10" href="#" onclick="roll(10)">D10</a>
+				<a id="d12" href="#" onclick="roll(12)">D12</a>
+				<a id="d20" href="#" onclick="roll(20)">D20</a>
+				<a id="d100" href="#" onclick="roll(100)">D100</a>
+			</div>
+		</div>
+		<script type="text/javascript">
+			function roll(sides) {
+				document.getElementById('output').innerHTML = rdmInt(1, sides);
+			}
+
+			function rdmInt(min, max) {
+				return Math.floor(Math.random() * (Math.floor(max) - Math.ceil(min) + 1)) + min;
+			}
+		</script>
+	</body>
+</html>

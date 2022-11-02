@@ -1,0 +1,65 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=screen-width, height=screen-height, initial-scale=1" />
+		<meta property="og:type" content="website" />
+    <meta property="og:site_name" content="AutoDM" />
+    <meta property="og:locale" content="en_US" />
+		<title>Deck of Many Things</title>
+		<style>
+			html, body {
+				font-family: 'arial';
+				font-size: 14px;
+				background-color: #1e212a;
+				color: #a2a2a2;
+			}
+			.container {
+				text-align: left;
+				padding: 0 20%;
+			}
+			.btn-container {
+				text-align: center;
+			}
+			a {
+				padding: 4% 4%;
+				margin: 2% 0;
+				text-decoration: none;
+				color: #ffffff;
+				background-color: #03aa6d;
+				text-shadow: 1px 1px #333333;
+				display: inline-block;
+				font-size: 20px;
+			}
+				a:hover {
+					background-color: #0470ff;
+				}
+			.output {
+				border: thin solid #ffffff;
+				font-size: 16px;
+				text-align: center;
+				margin-bottom: 2%;
+				padding: 10% 0;
+			}
+		</style>
+		<script type="text/javascript" src="./js/deck.js"></script>
+	</head>
+	<body>
+		<div class="container" id="container">
+			<h1>Deck of Many Things</h1>
+			<div id="output" class="output">-</div>
+			<div class="btn-container">
+				<a id="draw" href="#" onclick="draw(deck)">Draw a Card</a>
+			</div>
+		</div>
+		<script type="text/javascript">
+			let deck = new Deck();
+			deck.addStandardCards();
+			function draw(deck){
+				let out = document.getElementById('output');
+				let card = deck.drawCard();
+				out.innerHTML = card.text;
+			}
+		</script>
+	</body>
+</html>
